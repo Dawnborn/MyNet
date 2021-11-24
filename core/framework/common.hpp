@@ -5,28 +5,28 @@
 #ifndef MYNET_CORE_FRAMEWORK_COMMON_HPP_
 #define MYNET_CORE_FRAMEWORK_COMMON_HPP_
 
-#include <cstdint>
-#include <glog/logging.h>
 #include <gflags/gflags.h>
+#include <glog/logging.h>
 #include <gtest/gtest.h>
 
+#include <cmath>
+#include <cstdint>
 #include <cstring>
-#include <iostream>
 #include <fstream>
-#include <sstream>
-#include <set>
+#include <iostream>
 #include <map>
+#include <set>
+#include <sstream>
 #include <string>
+#include <utility>  // pair
 #include <vector>
-#include <utility> // pair
 
 #ifndef GFLAGS_GFLAGS_H_
 namespace gflags = google;
 #endif
 
 #define DISABLE_COPY_AND_ASSIGN(classname) \
-  private:
-  classname(const classname&);\
-  classname &operator=(const classname&)
+  classname(const classname&)=delete;\
+  classname& operator=(const classname&)=delete
 
 #endif //MYNET_CORE_FRAMEWORK_COMMON_HPP_
