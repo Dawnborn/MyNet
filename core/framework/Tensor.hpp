@@ -7,7 +7,11 @@
 #include <vector>
 #include <cstdint>
 #include <string>
-#include "glog/logging.h"
+#include "syncedmem.hpp"
+#include "MyNet_generated.h"
+#include "common.hpp"
+
+const uint32_t kMaxTensorAxes = 32;
 
 namespace MyNet {
 
@@ -125,9 +129,6 @@ class Tensor {
   void CopyFrom(const Tensor<Dtype>& src, boo copy_diff = false,
                 bool reshape = false);
 
-  const Dtype* cpu_data() const;
-  const Dtype* cpu_diff() const;
-
   inline Dtype data_at(uint32_t n, uint32_t c = 0, uint32_t h = 0,
                        uint32_t w = 0) const {
     return cpu_data()[offset(n,c,h,w)];
@@ -146,15 +147,50 @@ class Tensor {
     return cpu_diff()[offset(index)];
   }
 
-  inline const Dtype data() const {
-
+  inline const std::shared_ptr<SyncedMemory>& data() const {
+    DCHECK(data_);
+    return data_;
   }
 
+  inline const std::shared_ptr<SyncedMemory>& diff() const {
+    DCHECK(diff_);
+    return diff_;
+  }
+
+  const Dtype* cpu_data() const;
+  void set_cpu_data(Dtype* data);
+
+  const Dtype* cpu_diff() const;
+
+  Dtype* mutable_cpu_data();
+  Dtype* mutable_cpu_diff();
+
+  void Update();
+
+  void FromFlat(const TensorFlatT* flat, bool reshape=true);
+  flatbuffers::DetachedBuffer ToFlat(bool write_diff = false) const;
+
+  Dtype asum_data() const;
+  Dtype asum_diff() const;
+  Dtype sqsum_data() const;
+  Dtype sqsum_diff() const;
+
+  void scale_data(Dtype scale_factor);
+  void scale_diff(Dtype scale_factor);
+
+  void ShareData(const Tnesor& other);
+  void ShareDiff(const Tensor& other);
+  bool ShapeEquals(const TensorFlatT* other);
+
  protected:
-  Dtype data_;
-  Dtype diff_;
+  std::shared_ptr<SyncedMemory> data_;
+  std::shared_ptr<SyncedMemory> diff_;
   std::vector<uint32_t> shape_;
+  std::shared_ptr<SyncedMemory> shape_data_;
   uint32_t count_;
+  uint32_t capacity_; // size of SyncedMemory,
+
+  DISABLE_COPY_AND_ASSIGN(Tensor);
 };
 }
 

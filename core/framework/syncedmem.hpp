@@ -15,7 +15,7 @@ inline void MyNetMallocHost(void **ptr, uint32_t size) {
 }
 
 inline void MyNetFreeHost(void *ptr) {
-
+  free(ptr);
 }
 
 class SyncedMemory {
@@ -24,7 +24,7 @@ class SyncedMemory {
   explicit SyncedMemory(uint32_t size);
   ~SyncedMemory();
   const void *cpu_data();
-  void set_cpu_data();
+  void set_cpu_data(void *data);
   void set_gpu_data();
   void *mutable_cpu_data();
   void *mutable_gpu_data();
@@ -40,7 +40,7 @@ class SyncedMemory {
   bool own_cpu_data_;
   bool own_gpu_data_;
 
- DISABLE_COPY_AND_ASSIGN(SyncedMemory); //
+ DISABLE_COPY_AND_ASSIGN(SyncedMemory);
 };
 } // namespace MyNet
 
