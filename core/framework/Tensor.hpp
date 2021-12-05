@@ -25,6 +25,7 @@ class Tensor {
   void Reshape(uint32_t num, uint32_t channels, uint32_t height, uint32_t width);
   void Reshape(const std::vector<uint32_t> &shape);
   void Reshape(const TensorShapeT *shape);
+  void ReshapeLike(const Tensor& other);
 
   inline std::string shape_string() const {
     std::ostringstream stm;
@@ -126,7 +127,7 @@ class Tensor {
     return offset;
   }
 
-  void CopyFrom(const Tensor<Dtype>& src, boo copy_diff = false,
+  void CopyFrom(const Tensor<Dtype>& src, bool copy_diff = false,
                 bool reshape = false);
 
   inline Dtype data_at(uint32_t n, uint32_t c = 0, uint32_t h = 0,
@@ -162,8 +163,8 @@ class Tensor {
 
   const Dtype* cpu_diff() const;
 
-  Dtype* mutable_cpu_data();
-  Dtype* mutable_cpu_diff();
+  Dtype* mutable_cpu_data() const;
+  Dtype* mutable_cpu_diff() const;
 
   void Update();
 
