@@ -1,0 +1,15 @@
+
+
+[submodule "third-party/gflags"]
+	path = third-party/gflags
+	url = https://github.com/gflags/gflags.git
+
+[submodule "test/googletest"]
+	path = test/googletest
+	url = https://github.com/google/googletest.git
+[submodule "third-party/flatbuffers"]
+	path = third-party/flatbuffers
+	url = git@github.com:google/flatbuffers.git
+[submodule "third-party/glog"]
+	path = third-party/glog
+	url = git@github.com:google/glog.git
