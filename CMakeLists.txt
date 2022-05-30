@@ -16,8 +16,9 @@ find_package(gflags REQUIRED CONFIG HINTS "${GFLAGS_ROOT}" NO_DEFAULT_PATH)
 
 find_package(flattbuffers REQUIRED CONFIG HINTS "${FLATBUFFERS_ROOT" NO_DEFAULT_PATH)
 
-    
+add_subdirectory(test)
+
 add_subdirectory(core/framework)
+
 add_subdirectory(core/schema)
 
-add_subdirectory(test)
